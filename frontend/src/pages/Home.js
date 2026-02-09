@@ -16,23 +16,44 @@ const Home = () => {
   const { t } = useLanguage();
   const [testimonials, setTestimonials] = useState([]);
   const [faqs, setFaqs] = useState([]);
+  const [imageSettings, setImageSettings] = useState({});
+  const [siteImages, setSiteImages] = useState({});
   const { language } = useLanguage();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [testimonialsRes, faqsRes] = await Promise.all([
+        const [testimonialsRes, faqsRes, imageSettingsRes, imagesRes] = await Promise.all([
           axios.get(`${API}/testimonials`),
-          axios.get(`${API}/faqs`)
+          axios.get(`${API}/faqs`),
+          axios.get(`${API}/settings/images`),
+          axios.get(`${API}/images/all`)
         ]);
         setTestimonials(testimonialsRes.data);
         setFaqs(faqsRes.data.slice(0, 3)); // Only first 3 for preview
+        setImageSettings(imageSettingsRes.data);
+        
+        // Create a map of image id to url
+        const imgMap = {};
+        imagesRes.data.forEach(img => {
+          imgMap[img.id] = img.url;
+        });
+        setSiteImages(imgMap);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchData();
   }, []);
+
+  // Get image URL from settings or use default
+  const getImageUrl = (settingKey, defaultUrl) => {
+    const imageId = imageSettings[settingKey];
+    if (imageId && siteImages[imageId]) {
+      return siteImages[imageId];
+    }
+    return defaultUrl;
+  };
 
   const features = [
     {
@@ -84,7 +105,7 @@ const Home = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1708778002477-75611274f23d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxjaW5lbWF0aWMlMjBtb3ZpZSUyMGNvbGxhZ2UlMjBhYnN0cmFjdCUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3MDY0NDQzNHww&ixlib=rb-4.1.0&q=85')`
+              backgroundImage: `url('${getImageUrl('hero_image', 'https://images.unsplash.com/photo-1708778002477-75611274f23d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxjaW5lbWF0aWMlMjBtb3ZpZSUyMGNvbGxhZ2UlMjBhYnN0cmFjdCUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3MDY0NDQzNHww&ixlib=rb-4.1.0&q=85')}')`
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/50 to-slate-950" />
@@ -277,7 +298,7 @@ const Home = () => {
       <section className="py-24 md:py-32 relative overflow-hidden" data-testid="sports-section">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1607627000458-210e8d2bdb1d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxzcG9ydHMlMjBmb290YmFsbCUyMHNvY2NlciUyMHN0YWRpdW0lMjBuaWdodHxlbnwwfHx8fDE3NzA2NDY4NTB8MA&ixlib=rb-4.1.0&q=85"
+            src={getImageUrl('sports_image', 'https://images.unsplash.com/photo-1607627000458-210e8d2bdb1d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxzcG9ydHMlMjBmb290YmFsbCUyMHNvY2NlciUyMHN0YWRpdW0lMjBuaWdodHxlbnwwfHx8fDE3NzA2NDY4NTB8MA&ixlib=rb-4.1.0&q=85')}
             alt="Football stadium"
             className="w-full h-full object-cover opacity-30"
           />
@@ -436,7 +457,7 @@ const Home = () => {
       <section className="py-24 md:py-32 relative overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1593784991251-92ded75ea290?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwyfHxzbWFydCUyMHR2JTIwc3RyZWFtaW5nJTIwbGl2aW5nJTIwcm9vbXxlbnwwfHx8fDE3NzA2NDY4NDR8MA&ixlib=rb-4.1.0&q=85"
+            src={getImageUrl('cta_image', 'https://images.unsplash.com/photo-1593784991251-92ded75ea290?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwyfHxzbWFydCUyMHR2JTIwc3RyZWFtaW5nJTIwbGl2aW5nJTIwcm9vbXxlbnwwfHx8fDE3NzA2NDY4NDR8MA&ixlib=rb-4.1.0&q=85')}
             alt="Smart TV streaming"
             className="w-full h-full object-cover opacity-20"
           />
