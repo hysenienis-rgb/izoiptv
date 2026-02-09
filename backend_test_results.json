@@ -1,0 +1,129 @@
+{
+  "total_tests": 20,
+  "passed_tests": 20,
+  "failed_tests": 0,
+  "success_rate": 100.0,
+  "test_results": [
+    {
+      "name": "Health Check",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:27.868941"
+    },
+    {
+      "name": "Admin Setup (Already Exists)",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:28.325593"
+    },
+    {
+      "name": "Admin Login",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:29.011197"
+    },
+    {
+      "name": "Admin Me",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:29.364765"
+    },
+    {
+      "name": "Seed Data",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:29.817801"
+    },
+    {
+      "name": "Get Packages",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:30.266521"
+    },
+    {
+      "name": "Package Data Validation",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:30.266542"
+    },
+    {
+      "name": "Create Package",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:30.716515"
+    },
+    {
+      "name": "Update Package",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:31.067243"
+    },
+    {
+      "name": "Delete Package",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:31.531869"
+    },
+    {
+      "name": "Get Public FAQs",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:31.880291"
+    },
+    {
+      "name": "Get All FAQs",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:32.339936"
+    },
+    {
+      "name": "Get Public Testimonials",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:32.685823"
+    },
+    {
+      "name": "Get All Testimonials",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:33.066251"
+    },
+    {
+      "name": "Contact Form Submission",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:33.430335"
+    },
+    {
+      "name": "Get Contact Messages",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:33.774387"
+    },
+    {
+      "name": "Mark Message as Read",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:34.239245"
+    },
+    {
+      "name": "Delete Contact Message",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:34.583302"
+    },
+    {
+      "name": "Get Contact Info",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:34.929193"
+    },
+    {
+      "name": "Update Contact Info",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-02-09T13:55:35.275202"
+    }
+  ],
+  "timestamp": "2026-02-09T13:55:35.275224"
+}
