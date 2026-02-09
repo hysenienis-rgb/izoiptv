@@ -273,6 +273,56 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Sports Section */}
+      <section className="py-24 md:py-32 relative overflow-hidden" data-testid="sports-section">
+        <div className="absolute inset-0">
+          <img 
+            src="https://images.unsplash.com/photo-1607627000458-210e8d2bdb1d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxzcG9ydHMlMjBmb290YmFsbCUyMHNvY2NlciUyMHN0YWRpdW0lMjBuaWdodHxlbnwwfHx8fDE3NzA2NDY4NTB8MA&ixlib=rb-4.1.0&q=85"
+            alt="Football stadium"
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-slate-950" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6 font-['Outfit']">
+                {language === 'sq' ? 'Sport Live në HD' : language === 'de' ? 'Live-Sport in HD' : 'Live Sports in HD'}
+              </h2>
+              <p className="text-lg text-slate-300 mb-8 leading-relaxed">
+                {language === 'sq' 
+                  ? 'Ndiqni të gjitha ndeshjet e futbollit, basketbollit, tenisit dhe sporteve të tjera live në cilësi të lartë. Kurrë mos humbisni një moment!'
+                  : language === 'de'
+                  ? 'Verfolgen Sie alle Fußball-, Basketball-, Tennis- und andere Sportspiele live in hoher Qualität. Verpassen Sie nie einen Moment!'
+                  : 'Watch all football, basketball, tennis and other sports matches live in high quality. Never miss a moment!'}
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <div className="px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium">Football</div>
+                <div className="px-4 py-2 rounded-full bg-violet-500/20 text-violet-400 text-sm font-medium">Basketball</div>
+                <div className="px-4 py-2 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-medium">Tennis</div>
+                <div className="px-4 py-2 rounded-full bg-amber-500/20 text-amber-400 text-sm font-medium">MMA/UFC</div>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="hidden lg:block"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1729564739457-2c6aa728b06e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBmb290YmFsbCUyMHNvY2NlciUyMHN0YWRpdW0lMjBuaWdodHxlbnwwfHx8fDE3NzA2NDY4NTB8MA&ixlib=rb-4.1.0&q=85"
+                alt="Stadium at night"
+                className="rounded-3xl shadow-2xl"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section className="py-24 md:py-32 relative" data-testid="testimonials-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -384,7 +434,14 @@ const Home = () => {
 
       {/* CTA Section */}
       <section className="py-24 md:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-violet-500/20 to-blue-500/20" />
+        <div className="absolute inset-0">
+          <img 
+            src="https://images.unsplash.com/photo-1593784991251-92ded75ea290?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwyfHxzbWFydCUyMHR2JTIwc3RyZWFtaW5nJTIwbGl2aW5nJTIwcm9vbXxlbnwwfHx8fDE3NzA2NDY4NDR8MA&ixlib=rb-4.1.0&q=85"
+            alt="Smart TV streaming"
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-950" />
+        </div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

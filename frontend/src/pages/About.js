@@ -187,19 +187,41 @@ const About = () => {
       {/* Image Section */}
       <section className="py-16 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="relative rounded-3xl overflow-hidden"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1758687125679-d000e186e09b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwxfHxoYXBweSUyMGZhbWlseSUyMHdhdGNoaW5nJTIwdHYlMjBvbiUyMHNvZmElMjBuaWdodHxlbnwwfHx8fDE3NzA2NDQ0NDV8MA&ixlib=rb-4.1.0&q=85"
-              alt="Family watching TV"
-              className="w-full h-80 md:h-96 object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
-          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative rounded-3xl overflow-hidden"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1593784991251-92ded75ea290?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwyfHxzbWFydCUyMHR2JTIwc3RyZWFtaW5nJTIwbGl2aW5nJTIwcm9vbXxlbnwwfHx8fDE3NzA2NDY4NDR8MA&ixlib=rb-4.1.0&q=85"
+                alt="Smart TV streaming"
+                className="w-full h-64 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4">
+                <p className="text-white font-semibold">Smart TV Experience</p>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="relative rounded-3xl overflow-hidden"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1730830741396-ffb85bb2e983?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHwyfHx0diUyMHJlbW90ZSUyMGNvbnRyb2wlMjBlbnRlcnRhaW5tZW50fGVufDB8fHx8MTc3MDY0Njg1NHww&ixlib=rb-4.1.0&q=85"
+                alt="Entertainment setup"
+                className="w-full h-64 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4">
+                <p className="text-white font-semibold">Multi-Device Control</p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
     </div>
