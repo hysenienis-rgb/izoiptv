@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, Package, HelpCircle, MessageSquare, Users, 
   Settings, Image, LogOut, Menu, X, Save, Plus, Trash2, Edit2,
-  Mail, Phone, Send, Eye, EyeOff, Check
+  Mail, Phone, Send, Eye, EyeOff, Check, Upload, ImageIcon
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { Input } from '../components/ui/input';
@@ -27,6 +27,13 @@ const AdminDashboard = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [messages, setMessages] = useState([]);
   const [contactInfo, setContactInfo] = useState({ whatsapp: '', telegram: '', email: '' });
+  const [images, setImages] = useState([]);
+  const [imageSettings, setImageSettings] = useState({
+    hero_image: '',
+    sports_image: '',
+    about_image: '',
+    cta_image: ''
+  });
   
   // Edit states
   const [editingPackage, setEditingPackage] = useState(null);
@@ -50,18 +57,22 @@ const AdminDashboard = () => {
 
   const fetchAllData = async () => {
     try {
-      const [packagesRes, faqsRes, testimonialsRes, messagesRes, contactRes] = await Promise.all([
+      const [packagesRes, faqsRes, testimonialsRes, messagesRes, contactRes, imagesRes, imageSettingsRes] = await Promise.all([
         axios.get(`${API}/packages`),
         axiosAuth.get(`${API}/faqs/all`),
         axiosAuth.get(`${API}/testimonials/all`),
         axiosAuth.get(`${API}/contact/messages`),
-        axios.get(`${API}/contact-info`)
+        axios.get(`${API}/contact-info`),
+        axios.get(`${API}/images/all`),
+        axios.get(`${API}/settings/images`)
       ]);
       setPackages(packagesRes.data);
       setFaqs(faqsRes.data);
       setTestimonials(testimonialsRes.data);
       setMessages(messagesRes.data);
       setContactInfo(contactRes.data);
+      setImages(imagesRes.data);
+      setImageSettings(imageSettingsRes.data);
     } catch (error) {
       console.error('Error fetching data:', error);
       if (error.response?.status === 401) {
@@ -193,11 +204,56 @@ const AdminDashboard = () => {
     }
   };
 
+  // Image handlers
+  const handleImageUpload = async (e, category) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('category', category);
+    
+    try {
+      await axiosAuth.post(`${API}/images/upload?category=${category}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      fetchAllData();
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteImage = async (id) => {
+    if (!window.confirm('Are you sure?')) return;
+    try {
+      await axiosAuth.delete(`${API}/images/${id}`);
+      fetchAllData();
+    } catch (error) {
+      console.error('Error deleting image:', error);
+    }
+  };
+
+  const handleSaveImageSettings = async () => {
+    setLoading(true);
+    try {
+      await axiosAuth.put(`${API}/settings/images`, imageSettings);
+      alert('Image settings saved!');
+    } catch (error) {
+      console.error('Error saving image settings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const menuItems = [
     { id: 'packages', icon: Package, label: t('admin.packages') },
     { id: 'faqs', icon: HelpCircle, label: t('admin.faqs') },
     { id: 'testimonials', icon: Users, label: t('admin.testimonials') },
     { id: 'messages', icon: MessageSquare, label: t('admin.messages'), badge: messages.filter(m => !m.is_read).length },
+    { id: 'images', icon: ImageIcon, label: t('admin.images') || 'Images' },
     { id: 'contact', icon: Phone, label: t('admin.contact_info') }
   ];
 
