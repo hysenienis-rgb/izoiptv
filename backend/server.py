@@ -153,9 +153,17 @@ class ImageUpload(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
+    category: str = "general"  # hero, sports, testimonials, devices, general
     data: str  # base64 encoded
     content_type: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ImageUploadResponse(BaseModel):
+    id: str
+    name: str
+    category: str
+    content_type: str
+    url: str  # data URL for display
 
 # ============ HELPER FUNCTIONS ============
 
@@ -407,12 +415,17 @@ async def update_contact_info(data: ContactInfoUpdate, admin: dict = Depends(get
 # ============ IMAGE UPLOAD ROUTES ============
 
 @api_router.post("/images/upload")
-async def upload_image(file: UploadFile = File(...), admin: dict = Depends(get_current_admin)):
+async def upload_image(
+    file: UploadFile = File(...), 
+    category: str = "general",
+    admin: dict = Depends(get_current_admin)
+):
     contents = await file.read()
     encoded = base64.b64encode(contents).decode('utf-8')
     
     image = ImageUpload(
         name=file.filename,
+        category=category,
         data=encoded,
         content_type=file.content_type
     )
@@ -420,22 +433,63 @@ async def upload_image(file: UploadFile = File(...), admin: dict = Depends(get_c
     doc['created_at'] = doc['created_at'].isoformat()
     await db.images.insert_one(doc)
     
-    return {"id": image.id, "name": image.name}
+    return {
+        "id": image.id, 
+        "name": image.name, 
+        "category": image.category,
+        "url": f"data:{file.content_type};base64,{encoded}"
+    }
 
 @api_router.get("/images")
-async def get_images(admin: dict = Depends(get_current_admin)):
-    images = await db.images.find({}, {"_id": 0, "data": 0}).sort("created_at", -1).to_list(100)
+async def get_images(category: str = None):
+    query = {"category": category} if category else {}
+    images = await db.images.find(query, {"_id": 0, "data": 0}).sort("created_at", -1).to_list(100)
     for img in images:
         if isinstance(img.get('created_at'), str):
             img['created_at'] = datetime.fromisoformat(img['created_at'])
     return images
+
+@api_router.get("/images/all")
+async def get_all_images_with_data():
+    images = await db.images.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    result = []
+    for img in images:
+        if isinstance(img.get('created_at'), str):
+            img['created_at'] = datetime.fromisoformat(img['created_at'])
+        # Create data URL
+        img['url'] = f"data:{img.get('content_type', 'image/jpeg')};base64,{img.get('data', '')}"
+        del img['data']  # Remove raw data to reduce payload
+        result.append(img)
+    return result
 
 @api_router.get("/images/{image_id}")
 async def get_image(image_id: str):
     image = await db.images.find_one({"id": image_id}, {"_id": 0})
     if not image:
         raise HTTPException(status_code=404, detail="Image not found")
+    # Return as data URL
+    image['url'] = f"data:{image.get('content_type', 'image/jpeg')};base64,{image.get('data', '')}"
     return image
+
+@api_router.get("/images/category/{category}")
+async def get_images_by_category(category: str):
+    images = await db.images.find({"category": category}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    result = []
+    for img in images:
+        img['url'] = f"data:{img.get('content_type', 'image/jpeg')};base64,{img.get('data', '')}"
+        del img['data']
+        result.append(img)
+    return result
+
+@api_router.put("/images/{image_id}/category")
+async def update_image_category(image_id: str, category: str, admin: dict = Depends(get_current_admin)):
+    result = await db.images.update_one(
+        {"id": image_id},
+        {"$set": {"category": category}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return {"message": "Category updated"}
 
 @api_router.delete("/images/{image_id}")
 async def delete_image(image_id: str, admin: dict = Depends(get_current_admin)):
@@ -443,6 +497,29 @@ async def delete_image(image_id: str, admin: dict = Depends(get_current_admin)):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Image not found")
     return {"message": "Image deleted"}
+
+# ============ SITE SETTINGS FOR IMAGES ============
+
+@api_router.get("/settings/images")
+async def get_image_settings():
+    settings = await db.site_settings.find_one({"key": "images"}, {"_id": 0})
+    if not settings:
+        return {
+            "hero_image": "",
+            "sports_image": "",
+            "about_image": "",
+            "cta_image": ""
+        }
+    return settings.get("value", {})
+
+@api_router.put("/settings/images")
+async def update_image_settings(settings: dict, admin: dict = Depends(get_current_admin)):
+    await db.site_settings.update_one(
+        {"key": "images"},
+        {"$set": {"key": "images", "value": settings}},
+        upsert=True
+    )
+    return {"message": "Image settings updated"}
 
 # ============ SEED DATA ============
 
