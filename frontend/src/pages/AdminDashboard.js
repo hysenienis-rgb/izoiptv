@@ -611,6 +611,180 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
+
+          {/* Images Tab */}
+          {activeTab === 'images' && (
+            <div className="space-y-6" data-testid="admin-images-section">
+              <h2 className="text-xl font-bold text-white">{t('admin.images') || 'Imazhet'}</h2>
+              
+              {/* Image Settings - Select images for website sections */}
+              <div className="glass rounded-xl p-6 space-y-6">
+                <h3 className="text-lg font-semibold text-white">Cakto Imazhet për Seksionet</h3>
+                <p className="text-slate-400 text-sm">Zgjidh imazhet për seksionet e ndryshme të website-it</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Hero Image */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Hero Section (Kryefaqja)</label>
+                    <select
+                      value={imageSettings.hero_image || ''}
+                      onChange={(e) => setImageSettings({ ...imageSettings, hero_image: e.target.value })}
+                      className="w-full input-dark rounded-xl px-4 py-3"
+                    >
+                      <option value="">-- Default Image --</option>
+                      {images.map(img => (
+                        <option key={img.id} value={img.id}>{img.name}</option>
+                      ))}
+                    </select>
+                    {imageSettings.hero_image && images.find(i => i.id === imageSettings.hero_image) && (
+                      <img 
+                        src={images.find(i => i.id === imageSettings.hero_image)?.url} 
+                        alt="Hero preview" 
+                        className="mt-2 w-full h-32 object-cover rounded-lg"
+                      />
+                    )}
+                  </div>
+
+                  {/* Sports Image */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Sports Section</label>
+                    <select
+                      value={imageSettings.sports_image || ''}
+                      onChange={(e) => setImageSettings({ ...imageSettings, sports_image: e.target.value })}
+                      className="w-full input-dark rounded-xl px-4 py-3"
+                    >
+                      <option value="">-- Default Image --</option>
+                      {images.map(img => (
+                        <option key={img.id} value={img.id}>{img.name}</option>
+                      ))}
+                    </select>
+                    {imageSettings.sports_image && images.find(i => i.id === imageSettings.sports_image) && (
+                      <img 
+                        src={images.find(i => i.id === imageSettings.sports_image)?.url} 
+                        alt="Sports preview" 
+                        className="mt-2 w-full h-32 object-cover rounded-lg"
+                      />
+                    )}
+                  </div>
+
+                  {/* About Image */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">About Section</label>
+                    <select
+                      value={imageSettings.about_image || ''}
+                      onChange={(e) => setImageSettings({ ...imageSettings, about_image: e.target.value })}
+                      className="w-full input-dark rounded-xl px-4 py-3"
+                    >
+                      <option value="">-- Default Image --</option>
+                      {images.map(img => (
+                        <option key={img.id} value={img.id}>{img.name}</option>
+                      ))}
+                    </select>
+                    {imageSettings.about_image && images.find(i => i.id === imageSettings.about_image) && (
+                      <img 
+                        src={images.find(i => i.id === imageSettings.about_image)?.url} 
+                        alt="About preview" 
+                        className="mt-2 w-full h-32 object-cover rounded-lg"
+                      />
+                    )}
+                  </div>
+
+                  {/* CTA Image */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">CTA Section</label>
+                    <select
+                      value={imageSettings.cta_image || ''}
+                      onChange={(e) => setImageSettings({ ...imageSettings, cta_image: e.target.value })}
+                      className="w-full input-dark rounded-xl px-4 py-3"
+                    >
+                      <option value="">-- Default Image --</option>
+                      {images.map(img => (
+                        <option key={img.id} value={img.id}>{img.name}</option>
+                      ))}
+                    </select>
+                    {imageSettings.cta_image && images.find(i => i.id === imageSettings.cta_image) && (
+                      <img 
+                        src={images.find(i => i.id === imageSettings.cta_image)?.url} 
+                        alt="CTA preview" 
+                        className="mt-2 w-full h-32 object-cover rounded-lg"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleSaveImageSettings}
+                  disabled={loading}
+                  className="btn-primary px-6 py-3 rounded-full text-white font-semibold flex items-center space-x-2"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>Ruaj Caktimet</span>
+                </button>
+              </div>
+
+              {/* Upload New Image */}
+              <div className="glass rounded-xl p-6 space-y-4">
+                <h3 className="text-lg font-semibold text-white">Ngarko Imazh të Ri</h3>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {['hero', 'sports', 'about', 'general'].map((category) => (
+                    <div key={category} className="relative">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, category)}
+                        className="hidden"
+                        id={`upload-${category}`}
+                      />
+                      <label
+                        htmlFor={`upload-${category}`}
+                        className="flex flex-col items-center justify-center p-6 rounded-xl border-2 border-dashed border-white/10 hover:border-blue-500/50 cursor-pointer transition-colors"
+                      >
+                        <Upload className="w-8 h-8 text-slate-400 mb-2" />
+                        <span className="text-sm text-slate-400 capitalize">{category}</span>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Image Gallery */}
+              <div className="glass rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Galeria e Imazheve ({images.length})</h3>
+                
+                {images.length === 0 ? (
+                  <div className="text-center py-12">
+                    <ImageIcon className="w-12 h-12 text-slate-600 mx-auto mb-4" />
+                    <p className="text-slate-400">Nuk ka imazhe të ngarkuara</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {images.map((image) => (
+                      <div key={image.id} className="relative group rounded-xl overflow-hidden bg-slate-800">
+                        <img
+                          src={image.url}
+                          alt={image.name}
+                          className="w-full h-40 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <button
+                            onClick={() => handleDeleteImage(image.id)}
+                            className="p-2 rounded-full bg-red-500/80 text-white hover:bg-red-500"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
+                          <p className="text-white text-xs truncate">{image.name}</p>
+                          <span className="text-xs text-blue-400 capitalize">{image.category}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
