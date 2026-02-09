@@ -373,7 +373,7 @@ async def get_content(key: str):
 @api_router.put("/content/{key}")
 async def update_content(key: str, data: SiteContentUpdate, admin: dict = Depends(get_current_admin)):
     now = datetime.now(timezone.utc).isoformat()
-    result = await db.site_content.update_one(
+    await db.site_content.update_one(
         {"key": key},
         {"$set": {"content": data.content, "updated_at": now}},
         upsert=True
