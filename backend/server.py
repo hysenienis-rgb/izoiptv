@@ -25,7 +25,7 @@ db = client[os.environ['DB_NAME']]
 # JWT Configuration
 JWT_SECRET = os.environ.get('JWT_SECRET')
 if not JWT_SECRET:
-    JWT_SECRET = 'izo-iptv-secret-key-2024-fallback'
+    raise ValueError("JWT_SECRET environment variable is required")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = 24
 
@@ -305,8 +305,8 @@ async def create_contact_message(data: ContactMessageCreate):
     return message
 
 @api_router.get("/contact/messages", response_model=List[ContactMessage])
-async def get_contact_messages(admin: dict = Depends(get_current_admin)):
-    messages = await db.contact_messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+async def get_contact_messages(skip: int = 0, limit: int = 50, admin: dict = Depends(get_current_admin)):
+    messages = await db.contact_messages.find({}, {"_id": 0}).sort("created_at", -1).skip(skip).to_list(limit)
     for msg in messages:
         if isinstance(msg['created_at'], str):
             msg['created_at'] = datetime.fromisoformat(msg['created_at'])
@@ -452,8 +452,8 @@ async def get_images(category: str = None):
     return images
 
 @api_router.get("/images/all")
-async def get_all_images_with_data():
-    images = await db.images.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+async def get_all_images_with_data(skip: int = 0, limit: int = 30):
+    images = await db.images.find({}, {"_id": 0}).sort("created_at", -1).skip(skip).to_list(limit)
     result = []
     for img in images:
         if isinstance(img.get('created_at'), str):
